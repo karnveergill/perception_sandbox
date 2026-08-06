@@ -1,0 +1,35 @@
+services:
+
+  cpp-dev:
+
+    build:
+      context: .
+
+      args:
+        USERNAME: karnveer
+        USER_UID: 1000
+        USER_GID: 1000
+
+
+    volumes:
+
+      # Project source code
+      - .:/home/karnveer/Development/project
+
+
+      # Git identity
+      - ~/.gitconfig:/home/karnveer/.gitconfig:ro
+
+
+      # SSH agent forwarding
+      - ~/.ssh:/home/karnveer/.ssh:ro
+
+
+    working_dir:
+
+      /home/karnveer/Development/project
+
+
+    stdin_open: true
+
+    tty: true
