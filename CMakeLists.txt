@@ -14,9 +14,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Include compiler warning cmake module 
-include(cmake/CompilerWarnings.cmake)
-
 # Generate version header
 configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/version.h.in
@@ -52,6 +49,10 @@ target_include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_BINARY_DIR}/generated
 )
+
+# Enable compiler warnings
+include(cmake/CompilerWarnings.cmake)
+enable_project_warnings(${PROJECT_NAME})
 
 # Add applications
 add_subdirectory(apps)
