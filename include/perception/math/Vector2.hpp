@@ -6,60 +6,100 @@
 namespace perception::math
 {
     /**
-     * @brief Vector2 class for holding simple 2d (x,y) vectors
+     * @brief Vector2 class for holding 2d (x,y) vectors
      */
     class Vector2
     {
       public:
         /**
-         * Default constructor. Creates a vector with defaults X,Y 
-         * values of [0, 0]
+         * @brief Constructor. Creates a vector with defaults X,Y values of [0, 0]
          */
         Vector2();
 
         /**
-         * Constructor. Pass in values for X & Y elements of vector
+         * @brief Constructor. Pass in values for X & Y elements of vector
          */
         Vector2(double x, double y);
 
         /**
-         * Destructor
+         * @brief Destructor
          */
         ~Vector2() {}
 
         /**
-         * X element of vector [unitless]
+         * @brief X element of vector [unitless]
          */
         double X;
 
         /**
-         * Y element of vector [unitless]
+         * @brief Y element of vector [unitless]
          */
         double Y;
 
         /**
-         * Calculate mangintude of 2d vector
+         * @brief Magnitude of 2d vector
          */
         double Magnitude() const;
 
         /**
-         * Operator to add two 2d vectors 
+         * @brief Calculate squared magnitude of 2d vector
+         */
+        double SquaredMagnitude() const;
+
+        /**
+         * @brief Unit vector in same direction as original
+         */
+        Vector2 Normalized() const;
+
+        /**
+         * @brief Dot product of this vector and another
+         */
+        double Dot(const Vector2& other) const; 
+
+        /**
+         * @brief Operator to add two 2d vectors 
          */
         Vector2 operator+(const Vector2& other) const;
 
         /**
-         * Operator to subtract two 2d vectors  
+         * @brief Operator to subtract two 2d vectors  
          */
         Vector2 operator-(const Vector2& other) const;
 
         /**
-         * Operator to multiply vector by a scalar
+         * @brief Operator to multiply vector by a scalar
          */
         Vector2 operator*(double scalar) const; 
+
+        /**
+         * @brief Operator to divide vector by a scalar
+         */
+        Vector2 operator/(double scalar) const;
+
+        /**
+         * @brief Operator to add another vector to this one
+         */
+        Vector2& operator+=(const Vector2& other);
+
+        /**
+         * @brief Operator to subtract another vector from this one
+         */
+        Vector2& operator-=(const Vector2& other);
+
+        /**
+         * @brief Operator to compare if this vector is equal to another
+         */
+        bool operator==(const Vector2& other) const;
+
+        /**
+         * @brief Operator to compare if this vector is not equal to another
+         */
+        bool operator!=(const Vector2& other) const;
     };
 
     /**
      * @brief Operator to stream vector as string 
      */
     std::ostream& operator<<(std::ostream& os, const Vector2& vector);
+
 } // namespace perception::math
