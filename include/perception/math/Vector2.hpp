@@ -38,25 +38,28 @@ namespace perception::math
         double Y;
 
         /**
-         * Calculate mangintude of vector
+         * Calculate mangintude of 2d vector
          */
         double Magnitude() const;
 
         /**
-         * Operator to add vectors 
+         * Operator to add two 2d vectors 
          */
         Vector2 operator+(const Vector2& other) const;
 
         /**
-         * Operator to subtract vectors 
+         * Operator to subtract two 2d vectors  
          */
         Vector2 operator-(const Vector2& other) const;
 
         /**
-         * Operator to multiply vector 
+         * Operator to multiply vector by a scalar
          */
         Vector2 operator*(double scalar) const; 
     };
 
+    /**
+     * @brief Operator to stream vector as string 
+     */
     std::ostream& operator<<(std::ostream& os, const Vector2& vector);
 } // namespace perception::math
