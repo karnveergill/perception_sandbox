@@ -56,3 +56,7 @@ enable_project_warnings(${PROJECT_NAME})
 
 # Add applications
 add_subdirectory(apps)
+
+# Enable Testing
+enable_testing()
+add_subdirectory(tests)
