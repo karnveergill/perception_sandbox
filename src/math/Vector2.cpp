@@ -37,16 +37,46 @@ double Vector2::Dot(const Vector2& other) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Vector2 Vector2::operator+(const Vector2& vector_2) const
+Vector2 Vector2::Normalized() const
 {
-    return Vector2(X + vector_2.X, Y + vector_2.Y);
+    const double mag = Magnitude();
+    return (mag == 0.0) ? Vector2(0.0, 0.0) : *this / mag;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Vector2 Vector2::operator-(const Vector2& vector_2) const
+Vector2& Vector2::operator+=(const Vector2& other)
 {
-    return Vector2(X - vector_2.X, Y - vector_2.Y);
+    X += other.X;
+    Y += other.Y;
+    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector2& Vector2::operator-=(const Vector2& other)
+{
+    X -= other.X;
+    Y -= other.Y;
+    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector2 Vector2::operator+(const Vector2& other) const
+{
+    Vector2 result = *this;
+    result += other;
+    return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector2 Vector2::operator-(const Vector2& other) const
+{
+    Vector2 result = *this;
+    result += other;
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,26 +91,6 @@ Vector2 Vector2::operator*(double scalar) const
 Vector2 Vector2::operator/(double scalar) const
 {
     return Vector2(X / scalar, Y / scalar);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-Vector2& Vector2::operator+=(const Vector2& other)
-{
-    X += other.X;
-    Y += other.Y;
-
-    return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-Vector2& Vector2::operator-=(const Vector2& other)
-{
-    X -= other.X;
-    Y -= other.Y;
-
-    return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

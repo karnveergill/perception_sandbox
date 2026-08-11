@@ -47,14 +47,24 @@ namespace perception::math
         double SquaredMagnitude() const;
 
         /**
+         * @brief Dot product of this vector and another
+         */
+        double Dot(const Vector2& other) const; 
+
+        /**
          * @brief Unit vector in same direction as original
          */
         Vector2 Normalized() const;
 
         /**
-         * @brief Dot product of this vector and another
+         * @brief Operator to add another vector to this one
          */
-        double Dot(const Vector2& other) const; 
+        Vector2& operator+=(const Vector2& other);
+
+        /**
+         * @brief Operator to subtract another vector from this one
+         */
+        Vector2& operator-=(const Vector2& other);
 
         /**
          * @brief Operator to add two 2d vectors 
@@ -75,16 +85,6 @@ namespace perception::math
          * @brief Operator to divide vector by a scalar
          */
         Vector2 operator/(double scalar) const;
-
-        /**
-         * @brief Operator to add another vector to this one
-         */
-        Vector2& operator+=(const Vector2& other);
-
-        /**
-         * @brief Operator to subtract another vector from this one
-         */
-        Vector2& operator-=(const Vector2& other);
 
         /**
          * @brief Operator to compare if this vector is equal to another
