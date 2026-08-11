@@ -31,5 +31,15 @@ int main()
     std::cout << "Should be same as final time: " 
               << check << " Dist: " << check.Magnitude() << std::endl;  
 
+    if(check == prev_position)
+    {
+        std::cout << "Very nice" << std::endl; 
+    }
+
+    if(prev_position != position_0)
+    {
+        std::cout << "Good, not were we started" << std::endl;
+    }
+
     return 0; 
 }

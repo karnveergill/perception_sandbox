@@ -40,7 +40,7 @@ double Vector2::Dot(const Vector2& other) const
 Vector2 Vector2::Normalized() const
 {
     const double mag = Magnitude();
-    return (mag == 0.0) ? Vector2(0.0, 0.0) : *this / mag;
+    return (mag == 0.0) ? Vector2(0, 0) : *this / mag;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

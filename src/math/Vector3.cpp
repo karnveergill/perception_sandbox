@@ -16,30 +16,97 @@ Vector3::Vector3(double x, double y, double z)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+double Vector3::SquaredMagnitude() const
+{
+    return X*X + Y*Y + Z*Z;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 double Vector3::Magnitude() const
 {
-    return std::sqrt(X*X + Y*Y + Z*Z);
+    return std::sqrt(SquaredMagnitude());
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+double Vector3::Dot(const Vector3& other) const
+{
+    return (X*other.X + Y*other.Y + Z*other.Z);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector3 Vector3::Normalized() const
+{
+    const double mag = Magnitude();
+    return (mag == 0.0) ? Vector3(0, 0, 0) : *this/mag;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector3& Vector3::operator+=(const Vector3& other)
+{
+    X += other.X;
+    Y += other.Y;
+    Z += other.Z;
+    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector3& Vector3::operator-=(const Vector3& other)
+{
+    X -= other.X;
+    Y -= other.Y;
+    Z -= other.Z;
+    return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 Vector3 Vector3::operator+(const Vector3& other) const
 {
-    return Vector3(X + other.X, Y + other.Y, Z + other.Z);
+    Vector3 result = *this;
+    result += other;
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 Vector3 Vector3::operator-(const Vector3& other) const
 {
-    return Vector3(X - other.X, Y - other.Y, Z - other.Z);
+    Vector3 result = *this;
+    result -= other;
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 Vector3 Vector3::operator*(double scalar) const
 {
-    return Vector3(scalar * X, scalar * Y, scalar * Z);
+    return Vector3(X * scalar, Y * scalar, Z * scalar);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector3 Vector3::operator/(double scalar) const
+{
+    return Vector3(X / scalar, Y / scalar, Z / scalar); 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool Vector3::operator==(const Vector3& other) const
+{
+    return (X == other.X) && (Y == other.Y) && (Z == other.Z);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool Vector3::operator!=(const Vector3& other) const
+{
+    return (X != other.X) || (Y != other.Y) || (Z != other.Z);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
