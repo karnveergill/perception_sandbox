@@ -6,18 +6,18 @@
 namespace perception::math
 {
     /**
-     * @brief Vector3 class for holding 2d (x,y) vectors
+     * @brief Vector3 class for holding 3d [x,y,z] vectors
      */
     class Vector3
     {
       public:
         /**
-         * @brief Constructor. Creates a vector with defaults X,Y values of [0, 0]
+         * @brief Constructor. Creates a vector with defaults X,Y,Z values of [0, 0, 0]
          */
         Vector3();
 
         /**
-         * @brief Constructor. Pass in values for X & Y elements of vector
+         * @brief Constructor. Pass in values for X, Y, Z elements of vector
          */
         Vector3(double x, double y, double z);
 
@@ -42,12 +42,12 @@ namespace perception::math
         double Z;
 
         /**
-         * @brief Magnitude of 2d vector
+         * @brief Magnitude of 3d vector
          */
         double Magnitude() const;
 
         /**
-         * @brief Calculate squared magnitude of 2d vector
+         * @brief Calculate squared magnitude of 3d vector
          */
         double SquaredMagnitude() const;
 
@@ -72,12 +72,12 @@ namespace perception::math
         Vector3& operator-=(const Vector3& other);
 
         /**
-         * @brief Operator to add two 2d vectors 
+         * @brief Operator to add two 3d vectors 
          */
         Vector3 operator+(const Vector3& other) const;
 
         /**
-         * @brief Operator to subtract two 2d vectors  
+         * @brief Operator to subtract two 3d vectors  
          */
         Vector3 operator-(const Vector3& other) const;
 

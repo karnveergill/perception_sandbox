@@ -113,7 +113,7 @@ bool Vector3::operator!=(const Vector3& other) const
 
 std::ostream& operator<<(std::ostream& os, const Vector3& vector)
 {
-    os << "(" << vector.X << ", " << vector.Y << ", " << vector.Z << ")";
+    os << "[" << vector.X << ", " << vector.Y << ", " << vector.Z << "]";
     return os; 
 }
 

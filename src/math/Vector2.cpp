@@ -75,7 +75,7 @@ Vector2 Vector2::operator+(const Vector2& other) const
 Vector2 Vector2::operator-(const Vector2& other) const
 {
     Vector2 result = *this;
-    result += other;
+    result -= other;
     return result;
 }
 
@@ -111,7 +111,7 @@ bool Vector2::operator!=(const Vector2& other) const
 
 std::ostream& operator<<(std::ostream& os, const Vector2& vector)
 {
-    os << "(" << vector.X << ", " << vector.Y << ")";
+    os << "[" << vector.X << ", " << vector.Y << "]";
     return os;
 }
 
