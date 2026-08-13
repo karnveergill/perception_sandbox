@@ -187,6 +187,39 @@ TEST(Vector3Test, DotProductWithSelf)
                      vector.SquaredMagnitude());
 }
 
+TEST(Vector3Test, CrossProduct)
+{
+    perception::math::Vector3 a(1.0, 0.0, 0.0);
+    perception::math::Vector3 b(0.0, 1.0, 0.0);
+    auto result = a.Cross(b);
+
+    EXPECT_DOUBLE_EQ(result.X, 0.0);
+    EXPECT_DOUBLE_EQ(result.Y, 0.0);
+    EXPECT_DOUBLE_EQ(result.Z, 1.0);
+}
+
+TEST(Vector3Test, CrossProductReverse)
+{
+    perception::math::Vector3 a(1.0, 0.0, 0.0);
+    perception::math::Vector3 b(0.0, 1.0, 0.0);
+    auto result = b.Cross(a);
+
+    EXPECT_DOUBLE_EQ(result.X, 0.0);
+    EXPECT_DOUBLE_EQ(result.Y, 0.0);
+    EXPECT_DOUBLE_EQ(result.Z, -1.0);
+}
+
+TEST(Vector3Test, CrossProductParallel)
+{
+    perception::math::Vector3 a(1.0, 2.0, 3.0);
+    perception::math::Vector3 b(2.0, 4.0, 6.0);
+    auto result = a.Cross(b);
+
+    EXPECT_DOUBLE_EQ(result.X, 0.0);
+    EXPECT_DOUBLE_EQ(result.Y, 0.0);
+    EXPECT_DOUBLE_EQ(result.Z, 0.0);
+}
+
 TEST(Vector3Test, Normalized)
 {
     perception::math::Vector3 vector(2.0, 3.0, 6.0);
@@ -215,6 +248,14 @@ TEST(Vector3Test, NormalizeUnitVector)
     EXPECT_NEAR(result.X, 1.0, 1e-9);
     EXPECT_NEAR(result.Y, 0.0, 1e-9);
     EXPECT_NEAR(result.Z, 0.0, 1e-9);
+}
+
+TEST(Vector3Test, NormalizedHasUnitMagnitude)
+{
+    perception::math::Vector3 vector(8,4,-94);
+    auto norm = vector.Normalized();
+
+    EXPECT_NEAR(norm.Magnitude(), 1.0, 1e-9);
 }
 
 TEST(Vector3Test, Equality)

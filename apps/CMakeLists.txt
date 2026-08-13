@@ -10,7 +10,7 @@ target_link_libraries(
     perception::core
 )
 
-# Make vector demo executable and link perception library
+# Make 2d vector demo executable and link perception library
 add_executable(
     vector2_demo
     vector2_demo.cpp
@@ -30,6 +30,18 @@ add_executable(
 
 target_link_libraries(
     vector3_demo
+    PRIVATE
+    perception::core
+)
+
+# Make Vector Geometry demo
+add_executable(
+    vector_geometry_demo
+    vector_geometry_demo.cpp
+)
+
+target_link_libraries(
+    vector_geometry_demo
     PRIVATE
     perception::core
 )

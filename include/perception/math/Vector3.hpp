@@ -57,6 +57,11 @@ namespace perception::math
         double Dot(const Vector3& other) const; 
 
         /**
+         * @brief Cross product if this vector and another
+         */
+        Vector3 Cross(const Vector3& other) const;
+
+        /**
          * @brief Unit vector in same direction as original
          */
         Vector3 Normalized() const;

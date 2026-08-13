@@ -9,7 +9,7 @@ int main()
     std::string output; 
     output = perception::core::Hello() + "\n";
     output += ("Version: " + static_cast<std::string>(perception::core::VersionString()) + "\n");
-    output += "Karnveer is so cool";
+    output += "so cool";
     std::cout << output << std::endl; 
 
     return 0;

@@ -52,6 +52,16 @@ namespace perception::math
         double Dot(const Vector2& other) const; 
 
         /**
+         * @brief Calculate the 2D scalar cross product.
+         *
+         * Returns the signed magnitude of the cross product between
+         * this vector and another vector. A positive value indicates
+         * counterclockwise orientation, while a negative value indicates
+         * clockwise orientation, and zero means parallel.
+         */
+        double Cross(const Vector2& other) const;
+
+        /**
          * @brief Unit vector in same direction as original
          */
         Vector2 Normalized() const;

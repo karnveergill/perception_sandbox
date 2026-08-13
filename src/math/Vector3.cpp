@@ -37,6 +37,15 @@ double Vector3::Dot(const Vector3& other) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Vector3 Vector3::Cross(const Vector3& other) const
+{
+    return Vector3(Y*other.Z - Z*other.Y,
+                   Z*other.X - X*other.Z,
+                   X*other.Y - Y*other.X);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 Vector3 Vector3::Normalized() const
 {
     const double mag = Magnitude();
