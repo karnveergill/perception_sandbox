@@ -13,8 +13,8 @@ class Matrix
 
     ~Matrix() {}
 
-    size_t Rows();
-    size_t Columns();
+    size_t Rows() { return m_rows; }
+    size_t Columns() { return m_columns; }
 
     double& operator()(size_t row, size_t column);
     double operator()(size_t row, size_t column) const;
@@ -22,7 +22,6 @@ class Matrix
   private:
     size_t m_rows;
     size_t m_columns;
-
-    std::vector<double> m_data; 
+    std::vector<double> m_data;
 };
 }

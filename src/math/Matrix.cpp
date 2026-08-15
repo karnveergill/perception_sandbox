@@ -19,7 +19,7 @@ Matrix::Matrix(size_t rows, size_t columns)
 
 double& Matrix::operator()(size_t row, size_t column)
 {
-    if(row > m_rows || column > m_columns)
+    if(row >= m_rows || column >= m_columns)
     {
         throw Exception("Matrix index out of range. Size: [%lu, %lu] Index: [%lu, %lu]",
                         m_rows,
@@ -27,7 +27,6 @@ double& Matrix::operator()(size_t row, size_t column)
                         row,
                         column);
     }
-
     return m_data[row * m_columns + column];
 }
 
@@ -35,9 +34,9 @@ double& Matrix::operator()(size_t row, size_t column)
 
 double Matrix::operator()(size_t row, size_t column) const
 {
-    if(row > m_rows || column > m_columns)
+    if(row >= m_rows || column >= m_columns)
     {
-        throw Exception("Matrix index out of range. Size [%lu, %lu] Index: [%lu, %lu]",
+        throw Exception("Matrix index out of range. Size: [%lu, %lu] Index: [%lu, %lu]",
                         m_rows,
                         m_columns,
                         row,

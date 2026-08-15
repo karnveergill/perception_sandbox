@@ -16,8 +16,8 @@ TEST(MatrixTest, Constructor)
     double cols = 5;
     perception::math::Matrix matrix(rows, cols);
 
-    EXPECT_DOUBLE_EQ(matrix.Rows, rows);
-    EXPECT_DOUBLE_EQ(matrix.Columns, cols);
+    EXPECT_DOUBLE_EQ(matrix.Rows(), rows);
+    EXPECT_DOUBLE_EQ(matrix.Columns(), cols);
 }
 
 TEST(MatrixTest, ElementsInitToZero)
