@@ -31,7 +31,6 @@ RUN apt update && apt install -y \
     bash-completion \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Create developer user
 RUN groupadd --gid ${USER_GID} ${USERNAME} \
     && useradd \
@@ -45,14 +44,11 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
 
 # Copy shell configuration
 COPY docker/bashrc /home/${USERNAME}/.bashrc
-
 RUN chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.bashrc
 
-
+# Set symlink to working directory
 USER ${USERNAME}
-
-
 WORKDIR /home/${USERNAME}/Development/project
 
-
+# Launch bash shell 
 CMD ["/bin/bash"]

@@ -5,18 +5,23 @@
 #include <cstdio>
 #include <string>
 #include <stdexcept>
-
+////////////////////////////////////////////////////////////////////////////////
 class Exception : public std::exception
 {
 public:
-    // Constructor
+    /**
+     * @brief Constructor builds exception with a printf style c string and args 
+     */
     Exception(const char* format, ...)
         : m_error_msg(format)
     {
-        // Init va_list and use to determine length
+        // Tool to grab pointer to additional args from ... and iterate through 
         va_list args;
+        // Start tool and look for all arguments after format string
         va_start(args, format);
+        // Dry run building the string in a nullptr and get buffer length
         int length = vsnprintf(nullptr, 0, format, args) + 1;
+        // Clean up tool
         va_end(args);
 
         // Dynamically allocate memory for buffer
@@ -32,7 +37,9 @@ public:
         delete[] buffer; 
     }
 
-    // Destructor
+    /**
+     * @brief Destructor
+     */
     ~Exception() _NOEXCEPT {}
 
     /*
@@ -47,7 +54,7 @@ private:
     /*
      * @brief Stores exception string
      */
-    std::string m_error_msg; 
+    std::string m_error_msg;
 };
 
 #endif // EXCEPTION_H
