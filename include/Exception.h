@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <string>
 #include <stdexcept>
-////////////////////////////////////////////////////////////////////////////////
+
 class Exception : public std::exception
 {
 public:

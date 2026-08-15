@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <sstream>
 #include "perception/math/Matrix.hpp"
 #include "Exception.h"
 
@@ -52,4 +53,22 @@ TEST(MatrixTest, OutOfBounds)
 
     EXPECT_THROW(matrix(1,2), Exception);
     EXPECT_THROW(matrix(2,2), Exception);
+}
+
+TEST(MatrixTest, StreamOutput)
+{
+    perception::math::Matrix matrix(2,2);
+    std::ostringstream stream;
+    stream << matrix;
+
+    EXPECT_EQ(stream.str(), "\n[0.000000, 0.000000]\n[0.000000, 0.000000]\n");
+}
+
+TEST(MatrixTest, StringOutput)
+{
+    using namespace perception::math; 
+    perception::math::Matrix matrix(2,2);
+
+    EXPECT_EQ(perception::math::To_string(matrix), 
+              "\n[0.000000, 0.000000]\n[0.000000, 0.000000]\n");
 }
