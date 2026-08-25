@@ -31,5 +31,5 @@ class Matrix
 };
 
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
-std::string To_string(const Matrix& matrix);
+std::string Matrix_string(const Matrix& matrix);
 }

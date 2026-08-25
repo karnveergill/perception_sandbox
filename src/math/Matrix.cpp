@@ -48,6 +48,74 @@ double Matrix::operator()(size_t row, size_t column) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Matrix Matrix::operator+(const Matrix& other) const
+{
+    Matrix result = *this; 
+    result += other;
+    return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Matrix Matrix::operator-(const Matrix& other) const
+{
+    Matrix result = *this;
+    result -= other;
+    return result; 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Matrix& Matrix::operator+=(const Matrix& other)
+{
+    if(other.Rows() != m_rows || other.Columns() != m_columns)
+    {
+        throw Exception("Invalid matrix sizes for addition, sizes must match. "
+                        "Matrix A [%lu, %lu], Matrix B [%lu, %lu]",
+                        m_rows,
+                        m_columns,
+                        other.Rows(),
+                        other.Columns());
+    }
+
+    for(size_t row = 0; row < m_rows; row++)
+    {
+        for(size_t col = 0; col < m_columns; col++)
+        {
+            (*this)(row, col) += other(row, col);
+        }
+    }
+
+    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Matrix& Matrix::operator-=(const Matrix& other)
+{
+    if(other.Rows() != m_rows || other.Columns() != m_columns)
+    {
+        throw Exception("Invalid matrix sizes for subtraction, sizes must match. "
+                        "Matrix A [%lu, %lu], Matrix B [%lu, %lu]",
+                        m_rows,
+                        m_columns,
+                        other.Rows(),
+                        other.Columns());
+    }
+
+    for(size_t row = 0; row < m_rows; row++)
+    {
+        for(size_t col = 0; col < m_columns; col++)
+        {
+            (*this)(row, col) -= other(row, col);
+        }
+    }
+
+    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix)
 {
     std::string matrix_print = "\n";
@@ -73,7 +141,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix& matrix)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::string To_string(const Matrix& matrix)
+std::string Matrix_string(const Matrix& matrix)
 {
     std::ostringstream stream;
     stream << matrix;

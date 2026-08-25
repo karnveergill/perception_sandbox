@@ -17,7 +17,7 @@ public:
         // Tool to grab pointer to additional args from ... and iterate through 
         va_list args;
 
-        // Start tool build string dry run in nullptr to get buffer length
+        // Start tool & build string dry run in nullptr to get buffer length
         va_start(args, format);
         int length = vsnprintf(nullptr, 0, format, args) + 1;
         va_end(args);
@@ -29,7 +29,7 @@ public:
             return;
         }
 
-        // Allocate buffer of size length + null terminator
+        // Allocate buffer of size length + null terminator with \0
         std::string buffer(length + 1, '\0');
 
         // Restart va_list for actual use and create formatted message
