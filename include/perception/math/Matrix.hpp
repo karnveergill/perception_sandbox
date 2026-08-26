@@ -24,7 +24,7 @@ class Matrix
      * @brief Variable constructor specifing number of matrix rows and 
      * columns.
      */
-    Matrix(size_t rows, size_t columns); 
+    Matrix(std::size_t rows, std::size_t columns); 
 
     /**
      * @brief Destructor
@@ -34,24 +34,29 @@ class Matrix
     /**
      * @brief Get number of rows in matrix
      */
-    size_t Rows() const { return m_rows; }
+    std::size_t Rows() const { return m_rows; }
 
     /**
      * @brief Get number of columns in matrix
      */
-    size_t Columns() const { return m_columns; }
+    std::size_t Columns() const { return m_columns; }
+
+    /**
+     * @brief Return a square matrix of the specified size
+     */
+    static Matrix Identity(std::size_t size);
 
     /**
      * @brief Operator to access a matrix with (row, column) notation 
      * and set the data value at that index 
      */
-    double& operator()(size_t row, size_t column);
+    double& operator()(std::size_t row, std::size_t column);
 
     /**
      * @brief Operator to access a matrix with (row, column) notation 
      * and return a copy of the data at that index
      */
-    double operator()(size_t row, size_t column) const;
+    double operator()(std::size_t row, std::size_t column) const;
 
     /**
      * @brief Operator to add this matrix to another and return the 
@@ -89,16 +94,25 @@ class Matrix
      */
     bool operator!=(const Matrix& other) const;
 
+    /**
+     * @brief Operator to perform matrix multiplication
+     * @details If multiplying two matrices A*B, then the column size of 
+     * matrix A must match the row size of matrix B. The resulting matrix
+     * will be size [A rows, B columns] with each index being a dot product
+     * of the corresponding row vector in A and column vector in B.
+     */
+    Matrix operator*(const Matrix& other) const;
+
   private:
     /**
      * @brief The number of rows in this matrix
      */
-    size_t m_rows;
+    std::size_t m_rows;
 
     /**
      * @brief The number of columns in this matrix
      */
-    size_t m_columns;
+    std::size_t m_columns;
 
     /**
      * @brief The data stored in each index of matrix

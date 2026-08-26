@@ -145,6 +145,54 @@ bool Matrix::operator!=(const Matrix& other) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Matrix Matrix::operator*(const Matrix& other) const
+{
+    // Check inner sizes match on matrices
+    if(m_columns != other.Rows())
+    {
+        throw Exception("Invalid matrix multiplication sizes. Column size of "
+                        "matrix A must match row size of matrix B. Matrix A "
+                        "[%lu, %lu], Matrix B [%lu, %lu]",
+                        m_rows,
+                        m_columns,
+                        other.Rows(),
+                        other.Columns());
+    }
+
+    // Init empty matrix of resulting size
+    Matrix result(m_rows, other.Columns());
+
+    // Go across each row of matrix A (this) / row index for result 
+    for(std::size_t row = 0; row < m_rows; ++row)
+    {
+        // Go across each column of matrix B (other) / column index for result
+        for(std::size_t col = 0; col < other.Columns(); ++col)
+        {
+            // Dot product on matrix A row vector & matrix B column vector
+            for(std::size_t k = 0; k < m_columns; ++k)
+            {
+                result(row, col) += (*this)(row, k) * other(k, col);
+            }
+        }
+    }
+
+    return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Matrix Matrix::Identity(std::size_t size)
+{
+    Matrix id(size, size);
+    for(size_t diag = 0; diag < size; ++diag)
+    {
+        id(diag, diag) = 1.0;
+    }
+    return id;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix)
 {
     std::string matrix_print = "\n";

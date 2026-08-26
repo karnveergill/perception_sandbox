@@ -282,3 +282,138 @@ TEST(MatrixTest, DifferentDimensions)
     EXPECT_FALSE(A == B);
     EXPECT_TRUE(A != B);
 }
+
+void TestMatrixIdentity(std::size_t size)
+{
+    Matrix identity = Matrix::Identity(size);
+
+    for (std::size_t row = 0; row < size; ++row)
+    {
+        for (std::size_t col = 0; col < size; ++col)
+        {
+            if (row == col)
+            {
+                EXPECT_DOUBLE_EQ(identity(row, col), 1.0);
+            }
+            else
+            {
+                EXPECT_DOUBLE_EQ(identity(row, col), 0.0);
+            }
+        }
+    }
+}
+
+TEST(MatrixTest, Identity)
+{
+   TestMatrixIdentity(1);
+   TestMatrixIdentity(3);
+   TestMatrixIdentity(5);
+}
+
+TEST(MatrixTest, Multiplication2x2)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 5.0;
+    B(0, 1) = 6.0;
+    B(1, 0) = 7.0;
+    B(1, 1) = 8.0;
+
+    Matrix result = A * B;
+
+    EXPECT_EQ(result.Rows(), 2);
+    EXPECT_EQ(result.Columns(), 2);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 19.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 22.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 43.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 50.0);
+}
+
+TEST(MatrixTest, MultiplicationNonSquare)
+{
+    Matrix A(2, 3);
+    Matrix B(3, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    B(0, 0) = 7.0;
+    B(0, 1) = 8.0;
+    B(1, 0) = 9.0;
+    B(1, 1) = 10.0;
+    B(2, 0) = 11.0;
+    B(2, 1) = 12.0;
+
+    Matrix result = A * B;
+
+    EXPECT_EQ(result.Rows(), 2);
+    EXPECT_EQ(result.Columns(), 2);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 58.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 64.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 139.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 154.0);
+}
+
+TEST(MatrixTest, MultiplicationByIdentity)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+    A(2, 0) = 7.0;
+    A(2, 1) = 8.0;
+    A(2, 2) = 9.0;
+
+    Matrix I = Matrix::Identity(3);
+
+    EXPECT_TRUE(A * I == A);
+    EXPECT_TRUE(I * A == A);
+}
+
+TEST(MatrixTest, MultiplicationWithNegativeValues)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -1.0;
+    A(1, 0) = 2.0;
+    A(1, 1) = -2.0;
+
+    B(0, 0) = 3.0;
+    B(0, 1) = 3.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 3.0;
+
+    Matrix result = A * B;
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 0.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 0.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 0.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 0.0);
+}
+
+TEST(MatrixTest, MultiplicationInvalidDimensions)
+{
+    Matrix A(2, 3);
+    Matrix B(2, 2);
+
+    EXPECT_THROW(A * B, Exception);
+}
+
