@@ -116,6 +116,35 @@ Matrix& Matrix::operator-=(const Matrix& other)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+bool Matrix::operator==(const Matrix& other) const
+{
+    if(other.Rows() != m_rows || other.Columns() != m_columns)
+    {
+        return false;
+    }
+
+    for(size_t row = 0; row < m_rows; ++row)
+    {
+        for(size_t col = 0; col < m_columns; ++col)
+        {
+            if((*this)(row, col) != other(row, col))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool Matrix::operator!=(const Matrix& other) const
+{
+    return !(*this == other);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix)
 {
     std::string matrix_print = "\n";

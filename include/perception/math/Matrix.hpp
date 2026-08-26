@@ -77,6 +77,18 @@ class Matrix
      */
     Matrix& operator-=(const Matrix& other);
 
+    /**
+     * @brief Operator to compare this matrix to another of same dimension
+     * and return true if all values at matching indicies are equal
+     */
+    bool operator==(const Matrix& other) const;
+
+    /**
+     * @brief Operator to compare this matrix to another of same dimesion
+     * and return true if any value at matching indicies are not equal
+     */
+    bool operator!=(const Matrix& other) const;
+
   private:
     /**
      * @brief The number of rows in this matrix

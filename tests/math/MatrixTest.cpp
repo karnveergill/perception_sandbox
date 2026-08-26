@@ -192,3 +192,93 @@ TEST(MatrixTest, MatrixSubtractInvalidSizeThrow)
     Matrix B(1, 5);
     EXPECT_THROW(A - B, Exception);
 }
+
+TEST(MatrixTest, MatrixAdditionDoesNotModifyOperands)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 5.0;
+    B(0, 1) = 6.0;
+    B(1, 0) = 7.0;
+    B(1, 1) = 8.0;
+
+    Matrix originalA = A;
+    Matrix originalB = B;
+
+    Matrix C = A + B;
+
+    EXPECT_EQ(A, originalA);
+    EXPECT_EQ(B, originalB);
+}
+
+TEST(MatrixTest, Equality)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 1.0;
+    B(0, 1) = 2.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 4.0;
+
+    EXPECT_TRUE(A == B);
+    EXPECT_FALSE(A != B);
+}
+
+TEST(MatrixTest, Inequality)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 1.0;
+    B(0, 1) = 2.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 5.0;
+
+    EXPECT_FALSE(A == B);
+    EXPECT_TRUE(A != B);
+}
+
+TEST(MatrixTest, InequalityAtFirstElement)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 99.0;
+    B(0, 1) = 2.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 4.0;
+
+    EXPECT_FALSE(A == B);
+    EXPECT_TRUE(A != B);
+}
+
+TEST(MatrixTest, DifferentDimensions)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 3);
+
+    EXPECT_FALSE(A == B);
+    EXPECT_TRUE(A != B);
+}
