@@ -47,6 +47,30 @@ class Matrix
     static Matrix Identity(std::size_t size);
 
     /**
+     * @brief Transposed version of this matrix
+     */
+    Matrix Transpose() const;
+
+    /**
+     * @brief Get determinant of this matrix if square
+     */
+    double Determinant() const;
+
+    /**
+     * @brief Get inverse of this matrix if square
+     */
+    Matrix Inverse() const;
+
+    /**
+     * @brief Checks if the values between this matrix and another
+     * are approximately equal. Useful for when floating point math
+     * does not allow for exactness
+     */
+    bool Approx_equal(const Matrix& other,
+                      double abs_tolerance = 1e-12,
+                      double rel_tolerance = 1e-9) const;
+
+    /**
      * @brief Operator to access a matrix with (row, column) notation 
      * and set the data value at that index 
      */
@@ -103,6 +127,28 @@ class Matrix
      */
     Matrix operator*(const Matrix& other) const;
 
+    /**
+     * @brief Operator to multiply this matrix by a scalar and return updated
+     * version of this matrix
+     */
+    Matrix& operator*=(double scalar);
+
+    /**
+     * @brief Operator to multiply matrix by a scalar value
+     */
+    Matrix operator*(double scalar) const;
+
+    /**
+     * @brief Operator to divide this matrix by a scalar and return the updated
+     * version of this matrix
+     */
+    Matrix& operator/=(double scalar);
+
+    /**
+     * @brief Operator to divide matrix by a scalar value
+     */
+    Matrix operator/(double scalar) const;
+
   private:
     /**
      * @brief The number of rows in this matrix
@@ -118,6 +164,29 @@ class Matrix
      * @brief The data stored in each index of matrix
      */
     std::vector<double> m_data;
+
+    /**
+     * @brief Tolerance for floating point math zero comparison
+     */
+    static constexpr double ZERO_TOLERANCE = 1e-12;
+
+    /**
+     * @brief Swap the specified rows of this matrix
+     */
+    void swap_rows(std::size_t row1, std::size_t row2);
+
+    /**
+     * @brief Multiply a specified row of this matrix by a scalar 
+     */
+    void scale_row(double scalar, std::size_t row);
+
+    /**
+     * @brief Scale and add a specified source row to the specified
+     * target row
+     */
+    void add_scaled_row(double scalar, 
+                        std::size_t source_row, 
+                        std::size_t target_row);
 };
 
 /**

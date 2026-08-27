@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <sstream>
+#include <iomanip>
 #include "perception/math/Matrix.hpp"
 #include "Exception.h"
 
@@ -417,3 +418,244 @@ TEST(MatrixTest, MultiplicationInvalidDimensions)
     EXPECT_THROW(A * B, Exception);
 }
 
+TEST(MatrixTest, TransposeSquareMatrix)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+    A(2, 0) = 7.0;
+    A(2, 1) = 8.0;
+    A(2, 2) = 9.0;
+
+    Matrix result = A.Transpose();
+
+    EXPECT_EQ(result.Rows(), 3);
+    EXPECT_EQ(result.Columns(), 3);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+    EXPECT_DOUBLE_EQ(result(0, 2), 7.0);
+
+    EXPECT_DOUBLE_EQ(result(1, 0), 2.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 5.0);
+    EXPECT_DOUBLE_EQ(result(1, 2), 8.0);
+
+    EXPECT_DOUBLE_EQ(result(2, 0), 3.0);
+    EXPECT_DOUBLE_EQ(result(2, 1), 6.0);
+    EXPECT_DOUBLE_EQ(result(2, 2), 9.0);
+}
+
+TEST(MatrixTest, TransposeNonSquareMatrix)
+{
+    Matrix A(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    Matrix result = A.Transpose();
+
+    EXPECT_EQ(result.Rows(), 3);
+    EXPECT_EQ(result.Columns(), 2);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+
+    EXPECT_DOUBLE_EQ(result(1, 0), 2.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 5.0);
+
+    EXPECT_DOUBLE_EQ(result(2, 0), 3.0);
+    EXPECT_DOUBLE_EQ(result(2, 1), 6.0);
+}
+
+TEST(MatrixTest, TransposeTwiceReturnsOriginal)
+{
+    Matrix A(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    Matrix result = A.Transpose().Transpose();
+
+    EXPECT_TRUE(result == A);
+}
+
+TEST(MatrixTest, ScalarMultiplication)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix result = A * 2.0;
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 2.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 6.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 8.0);
+}
+
+TEST(MatrixTest, ScalarMultiplicationNegative)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = -4.0;
+
+    Matrix result = A * -2.0;
+
+    EXPECT_DOUBLE_EQ(result(0, 0), -2.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), -6.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 8.0);
+}
+
+TEST(MatrixTest, ScalarMultiplicationZero)
+{
+    Matrix A(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    Matrix result = A * 0.0;
+
+    for (std::size_t row = 0; row < result.Rows(); ++row)
+    {
+        for (std::size_t col = 0; col < result.Columns(); ++col)
+        {
+            EXPECT_DOUBLE_EQ(result(row, col), 0.0);
+        }
+    }
+}
+
+TEST(MatrixTest, ScalarMultiplicationDoesNotModifyOriginal)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix result = A * 2.0;
+
+    EXPECT_DOUBLE_EQ(A(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(A(0, 1), 2.0);
+    EXPECT_DOUBLE_EQ(A(1, 0), 3.0);
+    EXPECT_DOUBLE_EQ(A(1, 1), 4.0);
+}
+
+TEST(MatrixTest, Determinant2x2)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    EXPECT_DOUBLE_EQ(A.Determinant(), -2.0);
+}
+
+TEST(MatrixTest, DeterminantIdentity)
+{
+    Matrix I = Matrix::Identity(4);
+
+    EXPECT_DOUBLE_EQ(I.Determinant(), 1.0);
+}
+
+TEST(MatrixTest, DeterminantSingular)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 2.0;
+    A(1, 1) = 4.0;
+
+    EXPECT_DOUBLE_EQ(A.Determinant(), 0.0);
+}
+
+TEST(MatrixTest, DeterminantRequiresRowSwap)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 0.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 1.0;
+    A(1, 1) = 3.0;
+
+    EXPECT_DOUBLE_EQ(A.Determinant(), -2.0);
+}
+
+TEST(MatrixTest, InverseDiagonal)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 2.0;
+    A(1, 1) = 4.0;
+
+    Matrix expected(2, 2);
+
+    expected(0, 0) = 0.5;
+    expected(1, 1) = 0.25;
+
+    EXPECT_TRUE(A.Inverse() == expected);
+}
+
+TEST(MatrixTest, Inverse2x2)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix expected(2, 2);
+
+    expected(0, 0) = -2.0;
+    expected(0, 1) = 1.0;
+    expected(1, 0) = 1.5;
+    expected(1, 1) = -0.5;
+
+    EXPECT_TRUE(A.Inverse().Approx_equal(expected));
+}
+
+TEST(MatrixTest, MatrixTimesInverseIsIdentity)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix result = A * A.Inverse();
+    std::cout << result;
+
+    Matrix expected = Matrix::Identity(2);
+    std::cout << expected << std::endl;
+
+    EXPECT_TRUE(result.Approx_equal(expected));
+}
