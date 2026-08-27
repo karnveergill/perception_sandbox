@@ -2,19 +2,25 @@
 
 A lightweight C++20 sandbox for implementing and experimenting with robotics perception and estimation algorithms from scratch.
 
-The goal of this project is to build a small, modular perception library while developing a deeper understanding of the mathematics and software architecture behind common robotics algorithms.
+The goal of this project is to build a small perception library while developing a deeper understanding of the mathematics and software architecture behind common robotics algorithms.
 
-The project intentionally avoids large robotics frameworks such as ROS and Gazebo. Algorithms are implemented directly in C++ wherever practical so that their underlying mathematics and behavior remain explicit and easy to inspect.
+The project intentionally avoids large robotics frameworks such as ROS and Gazebo. Algorithms are implemented directly in C++ wherever practical so that their underlying mathematics and behavior remain clear and easy to inspect.
 
 ## Goals
 
-* Implement common robotics perception algorithms from scratch.
-* Develop strong C++ and modern CMake practices.
-* Build a reusable mathematical foundation for perception algorithms.
-* Experiment with sensor models, noise, estimation, tracking, and mapping.
-* Keep the core library lightweight and independent of visualization or robotics frameworks.
+* Implement common robotics perception and estimation algorithms from scratch.
+* Develop strong C++20 and modern CMake practices.
+* Build a reusable mathematical foundation for robotics algorithms.
+* Simulate noisy and imperfect sensors.
+* Explore sensor fusion and state estimation.
+* Model realistic sensor availability and failure conditions.
+* Build a simulated subsea navigation system.
+* Experiment with tracking and mapping algorithms.
+* Keep the core library lightweight and independent of robotics frameworks.
 * Provide reproducible simulations and measurable results.
-* Document the mathematics, assumptions, and failure modes of each algorithm.
+* Visualize ground truth, sensor measurements, estimates, and uncertainty.
+* Document the mathematics, assumptions, implementation details, and failure
+  modes of each algorithm.
 
 ## Project Structure
 
@@ -47,7 +53,7 @@ perception-sandbox/
 
 * [x] Vector2
 * [x] Vector3
-* [ ] Matrix
+* [x] Matrix
 * [ ] Random number generation
 * [ ] Gaussian distributions
 
@@ -57,11 +63,13 @@ perception-sandbox/
 * [ ] Motion models
 * [ ] World/time simulation
 
-### Sensors
+### Sensors & Failure modeling
 
 * [ ] GPS
 * [ ] IMU
+* [ ] DVL
 * [ ] Compass
+* [ ] Depth Sensor
 * [ ] Radar
 
 ### Estimation
@@ -69,6 +77,10 @@ perception-sandbox/
 * [ ] Kalman Filter
 * [ ] Extended Kalman Filter
 * [ ] Particle Filter
+
+### Navigation System and Performance Analysis
+* [ ] Subsea nav system
+* [ ] Use sim ground truth to track errors
 
 ### Tracking
 
