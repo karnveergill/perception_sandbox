@@ -1,8 +1,6 @@
 #include "perception/math/Matrix.hpp"
 #include "Exception.h"
 #include <sstream>
-#include <iostream>
-#include <iomanip>
 #include <cmath>
 #include <algorithm>
 
