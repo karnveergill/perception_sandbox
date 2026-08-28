@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <vector>
 #include <ostream>
+#include "Vector2.hpp"
+#include "Vector3.hpp"
 
 namespace perception::math
 {
@@ -152,6 +154,16 @@ class Matrix
      * @brief Operator to multiply matrix by a scalar value
      */
     Matrix operator*(double scalar) const;
+
+    /**
+     * @brief Operator to multiply a 2x2 matrix by 2d vector (Matrix*vector)
+     */
+    Vector2 operator*(const Vector2& vector) const;
+
+    /**
+     * @brief Operator to multiply a 3x3 matrix by 3d vector (Matrix*vector)
+     */
+    Vector3 operator*(const Vector3& vector) const;
 
     /**
      * @brief Operator to divide this matrix by a scalar and return the updated

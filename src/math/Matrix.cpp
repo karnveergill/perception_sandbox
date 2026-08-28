@@ -464,6 +464,35 @@ Matrix Matrix::operator*(double scalar) const
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Vector2 Matrix::operator*(const Vector2& vector) const
+{
+    if(m_rows != m_columns && m_rows != 2)
+    {
+        throw Exception("Can only multiply Vector2 by square 2x2 matrix");
+    }
+
+    // Assumes multiplication [Matrix]*[vector] = [vector]
+    return Vector2((*this)(0,0)*vector.X + (*this)(0,1)*vector.Y,
+                   (*this)(1,0)*vector.X + (*this)(1,1)*vector.Y);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+Vector3 Matrix::operator*(const Vector3& vector) const
+{
+    if(m_rows != m_columns && m_rows != 3)
+    {
+        throw Exception("Can only multiply Vector3 by square 3x3 matrix");
+    }
+
+    // Assumes muliplication of [Matrix]*[vector] = [vector]
+    return Vector3((*this)(0,0)*vector.X + (*this)(0,1)*vector.Y + (*this)(0,2)*vector.Z,
+                   (*this)(1,0)*vector.X + (*this)(1,1)*vector.Y + (*this)(1,2)*vector.Z,
+                   (*this)(2,0)*vector.X + (*this)(2,1)*vector.Y + (*this)(2,2)*vector.Z);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 Matrix& Matrix::operator/=(double scalar)
 {
     for(std::size_t i = 0; i < m_data.size(); ++i)

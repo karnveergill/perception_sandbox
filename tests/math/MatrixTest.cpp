@@ -659,3 +659,212 @@ TEST(MatrixTest, MatrixTimesInverseIsIdentity)
 
     EXPECT_TRUE(result.Approx_equal(expected));
 }
+
+TEST(MatrixTest, IsSquareTrue)
+{
+    Matrix A(3, 3);
+
+    EXPECT_TRUE(A.Is_square());
+}
+
+TEST(MatrixTest, IsSquareFalse)
+{
+    Matrix A(2, 3);
+
+    EXPECT_FALSE(A.Is_square());
+}
+
+TEST(MatrixTest, IsSquareFalseRowsGreaterThanColumns)
+{
+    Matrix A(3, 2);
+
+    EXPECT_FALSE(A.Is_square());
+}
+
+TEST(MatrixTest, IsSymmetricTrue)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = 2.0;
+    A(1, 1) = 4.0;
+    A(1, 2) = 5.0;
+
+    A(2, 0) = 3.0;
+    A(2, 1) = 5.0;
+    A(2, 2) = 6.0;
+
+    EXPECT_TRUE(A.Is_symmetric());
+}
+
+TEST(MatrixTest, IsSymmetricFalse)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = 2.0;
+    A(1, 1) = 4.0;
+    A(1, 2) = 5.0;
+
+    A(2, 0) = 7.0;  // Does not match A(0,2) = 3
+    A(2, 1) = 5.0;
+    A(2, 2) = 6.0;
+
+    EXPECT_FALSE(A.Is_symmetric());
+}
+
+TEST(MatrixTest, NonSquareMatrixIsNotSymmetric)
+{
+    Matrix A(2, 3);
+
+    EXPECT_FALSE(A.Is_symmetric());
+}
+
+TEST(MatrixTest, IsIdentityTrue)
+{
+    Matrix A = Matrix::Identity(3);
+
+    EXPECT_TRUE(A.Is_identity());
+}
+
+TEST(MatrixTest, IsIdentityFalse)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(1, 1) = 1.0;
+    A(2, 2) = 2.0;
+
+    EXPECT_FALSE(A.Is_identity());
+}
+
+TEST(MatrixTest, IsIdentityFalseWithOffDiagonalValue)
+{
+    Matrix A = Matrix::Identity(3);
+
+    A(0, 1) = 1.0;
+
+    EXPECT_FALSE(A.Is_identity());
+}
+
+TEST(MatrixTest, NonSquareMatrixIsNotIdentity)
+{
+    Matrix A(2, 3);
+
+    EXPECT_FALSE(A.Is_identity());
+}
+
+TEST(MatrixTest, MultiplyVector2)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Vector2 v(5.0, 6.0);
+
+    Vector2 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, 17.0);
+    EXPECT_DOUBLE_EQ(result.Y, 39.0);
+}
+
+TEST(MatrixTest, MultiplyVector2WithNegativeValues)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 2.0;
+    A(0, 1) = -3.0;
+    A(1, 0) = -4.0;
+    A(1, 1) = 5.0;
+
+    Vector2 v(-2.0, 3.0);
+
+    Vector2 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, -13.0);
+    EXPECT_DOUBLE_EQ(result.Y, 23.0);
+}
+
+TEST(MatrixTest, MultiplyVector3)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    A(2, 0) = 7.0;
+    A(2, 1) = 8.0;
+    A(2, 2) = 9.0;
+
+    Vector3 v(1.0, 2.0, 3.0);
+
+    Vector3 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, 14.0);
+    EXPECT_DOUBLE_EQ(result.Y, 32.0);
+    EXPECT_DOUBLE_EQ(result.Z, 50.0);
+}
+
+TEST(MatrixTest, MultiplyVector3WithNegativeValues)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = -4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = -6.0;
+
+    A(2, 0) = 7.0;
+    A(2, 1) = -8.0;
+    A(2, 2) = 9.0;
+
+    Vector3 v(1.0, -2.0, 3.0);
+
+    Vector3 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, 14.0);
+    EXPECT_DOUBLE_EQ(result.Y, -32.0);
+    EXPECT_DOUBLE_EQ(result.Z, 50.0);
+}
+
+TEST(MatrixTest, IdentityTimesVector2)
+{
+    Matrix I = Matrix::Identity(2);
+
+    Vector2 v(5.0, -3.0);
+
+    Vector2 result = I * v;
+
+    EXPECT_DOUBLE_EQ(result.X, v.X);
+    EXPECT_DOUBLE_EQ(result.Y, v.Y);
+}
+
+TEST(MatrixTest, IdentityTimesVector3)
+{
+    Matrix I = Matrix::Identity(3);
+
+    Vector3 v(5.0, -3.0, 7.0);
+
+    Vector3 result = I * v;
+
+    EXPECT_DOUBLE_EQ(result.X, v.X);
+    EXPECT_DOUBLE_EQ(result.Y, v.Y);
+    EXPECT_DOUBLE_EQ(result.Z, v.Z);
+}
