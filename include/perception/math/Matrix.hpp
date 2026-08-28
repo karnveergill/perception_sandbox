@@ -70,6 +70,11 @@ class Matrix
 
     /**
      * @brief Get determinant of this matrix if square
+     * 
+     * @todo NOTE: this is currently implemented with guassian elimination
+     * which is not the most computationally effective when constantly 
+     * calculating the determinant of new matricies repeatedly. Consider
+     * updating to LU (Lower-Upper) factorization approach.
      */
     double Determinant() const;
 
