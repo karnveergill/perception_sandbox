@@ -42,6 +42,21 @@ class Matrix
     std::size_t Columns() const { return m_columns; }
 
     /**
+     * @brief Return true is matrix is square
+     */
+    bool Is_square() const { return m_rows == m_columns; }
+
+    /**
+     * @brief Return true if this matrix is an identity matrix
+     */
+    bool Is_identity() const;
+
+    /**
+     * @brief Return true if this matrix is symmetric 
+     */
+    bool Is_symmetric() const;
+
+    /**
      * @brief Return a square matrix of the specified size
      */
     static Matrix Identity(std::size_t size);

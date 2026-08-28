@@ -20,6 +20,25 @@ Matrix::Matrix(size_t rows, size_t columns)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+bool Matrix::Is_identity() const
+{
+    if(!Is_square())
+    {
+        return false;
+    }
+
+    return (*this).Approx_equal(Identity(m_rows));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool Matrix::Is_symmetric() const
+{
+    return (*this) == (*this).Transpose();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 Matrix Matrix::Identity(std::size_t size)
 {
     Matrix id(size, size);
