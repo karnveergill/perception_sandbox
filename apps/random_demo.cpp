@@ -25,5 +25,14 @@ int main()
         cout << i <<  " - Rando: " << rand.Uniform_int(min,max) << 
                         " Rando 42: " << rand42.Uniform_int(min,max) << endl;
     }
+
+    cout << endl;
+    cout << "Normal Distrubution from mean 0, stddev 1" << endl;
+    double mean = 0, stddev = 1;
+    for(int i = 0; i < 10; ++i)
+    {
+        cout << i <<  " - Rando: " << rand.Gaussian(mean, stddev) << 
+                        " Rando 42: " << rand42.Gaussian(mean, stddev) << endl;
+    }
     return 0;
 }
