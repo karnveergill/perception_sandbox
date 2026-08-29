@@ -57,3 +57,15 @@ target_link_libraries(
     PRIVATE
     perception::core
 )
+
+# Make Matrix demo
+add_executable(
+    random_demo
+    random_demo.cpp
+)
+
+target_link_libraries(
+    random_demo
+    PRIVATE
+    perception::core
+)
