@@ -157,7 +157,7 @@ Matrix Matrix::Inverse() const
         // Make sure matrix is not singular (determinant = 0)
         if(A(pivot_row, col) < ZERO_TOLERANCE)
         {
-            throw Exception("Cannot invert a singular matrix");
+            throw Exception("Cannot invert a singular matrix (determinant=0)");
         }
 
         // Check for row swap
