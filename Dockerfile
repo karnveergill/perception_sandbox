@@ -25,6 +25,8 @@ RUN apt update && apt install -y \
     python3-pip \
     python3-numpy \
     python3-matplotlib \
+    pkg-config \
+    libsdl2-dev \
     vim \
     nano \
     sudo \
