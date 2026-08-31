@@ -58,7 +58,7 @@ target_link_libraries(
     perception::core
 )
 
-# Make Matrix demo
+# Make Random demo
 add_executable(
     random_demo
     random_demo.cpp
@@ -68,4 +68,37 @@ target_link_libraries(
     random_demo
     PRIVATE
     perception::core
+)
+
+# Make Math Viz Demo
+add_executable(
+    math_viz_demo
+    math_viz_demo.cpp
+)
+
+find_package(SDL2 REQUIRED)
+
+target_link_libraries(
+    math_viz_demo
+    PRIVATE
+    perception::core
+    SDL2::SDL2
+    OpenGL::GL
+)
+
+# Make Math Viz Demo
+add_executable(
+    sdl_test
+    sdl_test.cpp
+)
+
+find_package(SDL2 REQUIRED)
+find_package(OpenGL REQUIRED)
+
+target_link_libraries(
+    sdl_test
+    PRIVATE
+    perception::core
+    SDL2::SDL2
+    OpenGL::GL
 )
