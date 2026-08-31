@@ -12,6 +12,7 @@ add_executable(
     math/Vector2Test.cpp
     math/Vector3Test.cpp
     math/MatrixTest.cpp
+    math/RandomTest.cpp
 )
 
 # Link perception lib and gtest_main to test executable
