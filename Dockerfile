@@ -25,12 +25,13 @@ RUN apt update && apt install -y \
     python3-pip \
     python3-numpy \
     python3-matplotlib \
+    pkg-config \
+    libsdl2-dev \
     vim \
     nano \
     sudo \
     bash-completion \
     && rm -rf /var/lib/apt/lists/*
-
 
 # Create developer user
 RUN groupadd --gid ${USER_GID} ${USERNAME} \
@@ -45,14 +46,11 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
 
 # Copy shell configuration
 COPY docker/bashrc /home/${USERNAME}/.bashrc
-
 RUN chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.bashrc
 
-
+# Set symlink to working directory
 USER ${USERNAME}
-
-
 WORKDIR /home/${USERNAME}/Development/project
 
-
+# Launch bash shell 
 CMD ["/bin/bash"]

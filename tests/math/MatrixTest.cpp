@@ -1,0 +1,870 @@
+#include <gtest/gtest.h>
+#include <sstream>
+#include <iomanip>
+#include "perception/math/Matrix.hpp"
+#include "Exception.h"
+
+using namespace perception::math;
+
+TEST(MatrixTest, DefaultConstructor)
+{
+   Matrix matrix;
+
+   EXPECT_DOUBLE_EQ(matrix.Rows(), 0.0);
+   EXPECT_DOUBLE_EQ(matrix.Columns(), 0.0);
+}
+
+TEST(MatrixTest, Constructor)
+{
+    double rows = 3;
+    double cols = 5;
+    Matrix matrix(rows, cols);
+
+    EXPECT_DOUBLE_EQ(matrix.Rows(), rows);
+    EXPECT_DOUBLE_EQ(matrix.Columns(), cols);
+}
+
+TEST(MatrixTest, ElementsInitToZero)
+{
+    Matrix matrix(2, 3);
+
+    EXPECT_DOUBLE_EQ(matrix(0,0), 0.0);
+    EXPECT_DOUBLE_EQ(matrix(0,1), 0.0);
+    EXPECT_DOUBLE_EQ(matrix(0,2), 0.0);
+    EXPECT_DOUBLE_EQ(matrix(1,0), 0.0);
+    EXPECT_DOUBLE_EQ(matrix(1,1), 0.0);
+    EXPECT_DOUBLE_EQ(matrix(1,2), 0.0);
+}
+
+TEST(MatrixTest, ElementAssignment)
+{
+    Matrix matrix(2, 2);
+    matrix(0,0) = 9;
+    matrix(0,1) = 4.5;
+    matrix(1,0) = 7.0;
+    matrix(1,1) = 6.77;
+
+    EXPECT_DOUBLE_EQ(matrix(0,0), 9.0);
+    EXPECT_DOUBLE_EQ(matrix(0,1), 4.5);
+    EXPECT_DOUBLE_EQ(matrix(1,0), 7.0);
+    EXPECT_DOUBLE_EQ(matrix(1,1), 6.77);
+}
+
+TEST(MatrixTest, OutOfBounds)
+{
+    Matrix matrix(2,2);
+
+    EXPECT_THROW(matrix(1,2), Exception);
+    EXPECT_THROW(matrix(2,2), Exception);
+}
+
+TEST(MatrixTest, StreamOutput)
+{
+    Matrix matrix(2,2);
+    std::ostringstream stream;
+    stream << matrix;
+
+    EXPECT_EQ(stream.str(), "\n[0.000000, 0.000000]\n[0.000000, 0.000000]\n");
+}
+
+TEST(MatrixTest, StringOutput)
+{
+    Matrix matrix(2,2);
+    EXPECT_EQ(Matrix_string(matrix), 
+              "\n[0.000000, 0.000000]\n[0.000000, 0.000000]\n");
+}
+
+void TestMatrixAddOrSubtract(std::size_t rows, std::size_t cols, bool add=true)
+{
+    Matrix A(rows, cols);
+    Matrix B(rows, cols);
+
+    double val = 0; 
+    for(std::size_t row = 0; row < rows; ++row)
+    {
+        for(std::size_t col = 0; col < cols; ++col)
+        {
+            B(row, col) = val + rows*cols;
+            A(row, col) = val++;
+        }
+    }
+
+    Matrix C = add ? A + B : A - B;
+    for(std::size_t row = 0; row < C.Rows(); ++row)
+    {
+        for(std::size_t col = 0; col < C.Columns(); ++col)
+        {
+            double B_val = add ? B(row, col) : -1 * B(row, col);
+            EXPECT_DOUBLE_EQ(C(row, col), A(row, col) + B_val);
+        }
+    }
+}
+
+TEST(MatrixTest, MatrixAddition)
+{
+    TestMatrixAddOrSubtract(1, 1); // Smallest
+    TestMatrixAddOrSubtract(1, 5); // Single row
+    TestMatrixAddOrSubtract(5, 1); // Single column
+    TestMatrixAddOrSubtract(2, 2); // Square
+    TestMatrixAddOrSubtract(3, 3); // Larger Square
+    TestMatrixAddOrSubtract(2, 3); // Rectangular
+}
+
+TEST(MatrixTest, MatrixSubtraction)
+{
+    TestMatrixAddOrSubtract(1, 1, false); // Smallest
+    TestMatrixAddOrSubtract(1, 5, false); // Single row
+    TestMatrixAddOrSubtract(5, 1, false); // Single column
+    TestMatrixAddOrSubtract(2, 2, false); // Square
+    TestMatrixAddOrSubtract(3, 3, false); // Larger Square
+    TestMatrixAddOrSubtract(2, 3, false); // Rectangular
+}
+
+TEST(MatrixTest, MatrixAdditionWithNegativeValues)
+{
+    Matrix A(2, 3);
+    Matrix B(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = -4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = -6.0;
+
+    B(0, 0) = -7.0;
+    B(0, 1) = 8.0;
+    B(0, 2) = -9.0;
+    B(1, 0) = 10.0;
+    B(1, 1) = -11.0;
+    B(1, 2) = 12.0;
+
+    Matrix C = A + B;
+
+    for (std::size_t row = 0; row < C.Rows(); ++row)
+    {
+        for (std::size_t col = 0; col < C.Columns(); ++col)
+        {
+            EXPECT_DOUBLE_EQ(C(row, col), A(row, col) + B(row, col));
+        }
+    }
+}
+
+TEST(MatrixTest, MatrixSubtractionWithNegativeValues)
+{
+    Matrix A(2, 3);
+    Matrix B(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = -4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = -6.0;
+
+    B(0, 0) = -7.0;
+    B(0, 1) = 8.0;
+    B(0, 2) = -9.0;
+    B(1, 0) = 10.0;
+    B(1, 1) = -11.0;
+    B(1, 2) = 12.0;
+
+    Matrix C = A - B;
+
+    for (std::size_t row = 0; row < C.Rows(); ++row)
+    {
+        for (std::size_t col = 0; col < C.Columns(); ++col)
+        {
+            EXPECT_DOUBLE_EQ(C(row, col), A(row, col) - B(row, col));
+        }
+    }
+}
+
+TEST(MatrixTest, MatrixAddInvalidSizeThrow)
+{
+    Matrix A(2, 3);
+    Matrix B(3, 2);
+    EXPECT_THROW(A + B, Exception);
+}
+
+TEST(MatrixTest, MatrixSubtractInvalidSizeThrow)
+{
+    Matrix A(5, 1);
+    Matrix B(1, 5);
+    EXPECT_THROW(A - B, Exception);
+}
+
+TEST(MatrixTest, MatrixAdditionDoesNotModifyOperands)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 5.0;
+    B(0, 1) = 6.0;
+    B(1, 0) = 7.0;
+    B(1, 1) = 8.0;
+
+    Matrix originalA = A;
+    Matrix originalB = B;
+
+    Matrix C = A + B;
+
+    EXPECT_EQ(A, originalA);
+    EXPECT_EQ(B, originalB);
+}
+
+TEST(MatrixTest, Equality)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 1.0;
+    B(0, 1) = 2.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 4.0;
+
+    EXPECT_TRUE(A == B);
+    EXPECT_FALSE(A != B);
+}
+
+TEST(MatrixTest, Inequality)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 1.0;
+    B(0, 1) = 2.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 5.0;
+
+    EXPECT_FALSE(A == B);
+    EXPECT_TRUE(A != B);
+}
+
+TEST(MatrixTest, InequalityAtFirstElement)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 99.0;
+    B(0, 1) = 2.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 4.0;
+
+    EXPECT_FALSE(A == B);
+    EXPECT_TRUE(A != B);
+}
+
+TEST(MatrixTest, DifferentDimensions)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 3);
+
+    EXPECT_FALSE(A == B);
+    EXPECT_TRUE(A != B);
+}
+
+void TestMatrixIdentity(std::size_t size)
+{
+    Matrix identity = Matrix::Identity(size);
+
+    for (std::size_t row = 0; row < size; ++row)
+    {
+        for (std::size_t col = 0; col < size; ++col)
+        {
+            if (row == col)
+            {
+                EXPECT_DOUBLE_EQ(identity(row, col), 1.0);
+            }
+            else
+            {
+                EXPECT_DOUBLE_EQ(identity(row, col), 0.0);
+            }
+        }
+    }
+}
+
+TEST(MatrixTest, Identity)
+{
+   TestMatrixIdentity(1);
+   TestMatrixIdentity(3);
+   TestMatrixIdentity(5);
+}
+
+TEST(MatrixTest, Multiplication2x2)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    B(0, 0) = 5.0;
+    B(0, 1) = 6.0;
+    B(1, 0) = 7.0;
+    B(1, 1) = 8.0;
+
+    Matrix result = A * B;
+
+    EXPECT_EQ(result.Rows(), 2);
+    EXPECT_EQ(result.Columns(), 2);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 19.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 22.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 43.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 50.0);
+}
+
+TEST(MatrixTest, MultiplicationNonSquare)
+{
+    Matrix A(2, 3);
+    Matrix B(3, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    B(0, 0) = 7.0;
+    B(0, 1) = 8.0;
+    B(1, 0) = 9.0;
+    B(1, 1) = 10.0;
+    B(2, 0) = 11.0;
+    B(2, 1) = 12.0;
+
+    Matrix result = A * B;
+
+    EXPECT_EQ(result.Rows(), 2);
+    EXPECT_EQ(result.Columns(), 2);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 58.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 64.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 139.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 154.0);
+}
+
+TEST(MatrixTest, MultiplicationByIdentity)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+    A(2, 0) = 7.0;
+    A(2, 1) = 8.0;
+    A(2, 2) = 9.0;
+
+    Matrix I = Matrix::Identity(3);
+
+    EXPECT_TRUE(A * I == A);
+    EXPECT_TRUE(I * A == A);
+}
+
+TEST(MatrixTest, MultiplicationWithNegativeValues)
+{
+    Matrix A(2, 2);
+    Matrix B(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -1.0;
+    A(1, 0) = 2.0;
+    A(1, 1) = -2.0;
+
+    B(0, 0) = 3.0;
+    B(0, 1) = 3.0;
+    B(1, 0) = 3.0;
+    B(1, 1) = 3.0;
+
+    Matrix result = A * B;
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 0.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 0.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 0.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 0.0);
+}
+
+TEST(MatrixTest, MultiplicationInvalidDimensions)
+{
+    Matrix A(2, 3);
+    Matrix B(2, 2);
+
+    EXPECT_THROW(A * B, Exception);
+}
+
+TEST(MatrixTest, TransposeSquareMatrix)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+    A(2, 0) = 7.0;
+    A(2, 1) = 8.0;
+    A(2, 2) = 9.0;
+
+    Matrix result = A.Transpose();
+
+    EXPECT_EQ(result.Rows(), 3);
+    EXPECT_EQ(result.Columns(), 3);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+    EXPECT_DOUBLE_EQ(result(0, 2), 7.0);
+
+    EXPECT_DOUBLE_EQ(result(1, 0), 2.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 5.0);
+    EXPECT_DOUBLE_EQ(result(1, 2), 8.0);
+
+    EXPECT_DOUBLE_EQ(result(2, 0), 3.0);
+    EXPECT_DOUBLE_EQ(result(2, 1), 6.0);
+    EXPECT_DOUBLE_EQ(result(2, 2), 9.0);
+}
+
+TEST(MatrixTest, TransposeNonSquareMatrix)
+{
+    Matrix A(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    Matrix result = A.Transpose();
+
+    EXPECT_EQ(result.Rows(), 3);
+    EXPECT_EQ(result.Columns(), 2);
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+
+    EXPECT_DOUBLE_EQ(result(1, 0), 2.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 5.0);
+
+    EXPECT_DOUBLE_EQ(result(2, 0), 3.0);
+    EXPECT_DOUBLE_EQ(result(2, 1), 6.0);
+}
+
+TEST(MatrixTest, TransposeTwiceReturnsOriginal)
+{
+    Matrix A(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    Matrix result = A.Transpose().Transpose();
+
+    EXPECT_TRUE(result == A);
+}
+
+TEST(MatrixTest, ScalarMultiplication)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix result = A * 2.0;
+
+    EXPECT_DOUBLE_EQ(result(0, 0), 2.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), 6.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 8.0);
+}
+
+TEST(MatrixTest, ScalarMultiplicationNegative)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = -4.0;
+
+    Matrix result = A * -2.0;
+
+    EXPECT_DOUBLE_EQ(result(0, 0), -2.0);
+    EXPECT_DOUBLE_EQ(result(0, 1), 4.0);
+    EXPECT_DOUBLE_EQ(result(1, 0), -6.0);
+    EXPECT_DOUBLE_EQ(result(1, 1), 8.0);
+}
+
+TEST(MatrixTest, ScalarMultiplicationZero)
+{
+    Matrix A(2, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    Matrix result = A * 0.0;
+
+    for (std::size_t row = 0; row < result.Rows(); ++row)
+    {
+        for (std::size_t col = 0; col < result.Columns(); ++col)
+        {
+            EXPECT_DOUBLE_EQ(result(row, col), 0.0);
+        }
+    }
+}
+
+TEST(MatrixTest, ScalarMultiplicationDoesNotModifyOriginal)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix result = A * 2.0;
+
+    EXPECT_DOUBLE_EQ(A(0, 0), 1.0);
+    EXPECT_DOUBLE_EQ(A(0, 1), 2.0);
+    EXPECT_DOUBLE_EQ(A(1, 0), 3.0);
+    EXPECT_DOUBLE_EQ(A(1, 1), 4.0);
+}
+
+TEST(MatrixTest, Determinant2x2)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    EXPECT_DOUBLE_EQ(A.Determinant(), -2.0);
+}
+
+TEST(MatrixTest, DeterminantIdentity)
+{
+    Matrix I = Matrix::Identity(4);
+
+    EXPECT_DOUBLE_EQ(I.Determinant(), 1.0);
+}
+
+TEST(MatrixTest, DeterminantSingular)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 2.0;
+    A(1, 1) = 4.0;
+
+    EXPECT_DOUBLE_EQ(A.Determinant(), 0.0);
+}
+
+TEST(MatrixTest, DeterminantRequiresRowSwap)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 0.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 1.0;
+    A(1, 1) = 3.0;
+
+    EXPECT_DOUBLE_EQ(A.Determinant(), -2.0);
+}
+
+TEST(MatrixTest, InverseDiagonal)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 2.0;
+    A(1, 1) = 4.0;
+
+    Matrix expected(2, 2);
+
+    expected(0, 0) = 0.5;
+    expected(1, 1) = 0.25;
+
+    EXPECT_TRUE(A.Inverse() == expected);
+}
+
+TEST(MatrixTest, Inverse2x2)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix expected(2, 2);
+
+    expected(0, 0) = -2.0;
+    expected(0, 1) = 1.0;
+    expected(1, 0) = 1.5;
+    expected(1, 1) = -0.5;
+
+    EXPECT_TRUE(A.Inverse().Approx_equal(expected));
+}
+
+TEST(MatrixTest, MatrixTimesInverseIsIdentity)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Matrix result = A * A.Inverse();
+    std::cout << result;
+
+    Matrix expected = Matrix::Identity(2);
+    std::cout << expected << std::endl;
+
+    EXPECT_TRUE(result.Approx_equal(expected));
+}
+
+TEST(MatrixTest, IsSquareTrue)
+{
+    Matrix A(3, 3);
+
+    EXPECT_TRUE(A.Is_square());
+}
+
+TEST(MatrixTest, IsSquareFalse)
+{
+    Matrix A(2, 3);
+
+    EXPECT_FALSE(A.Is_square());
+}
+
+TEST(MatrixTest, IsSquareFalseRowsGreaterThanColumns)
+{
+    Matrix A(3, 2);
+
+    EXPECT_FALSE(A.Is_square());
+}
+
+TEST(MatrixTest, IsSymmetricTrue)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = 2.0;
+    A(1, 1) = 4.0;
+    A(1, 2) = 5.0;
+
+    A(2, 0) = 3.0;
+    A(2, 1) = 5.0;
+    A(2, 2) = 6.0;
+
+    EXPECT_TRUE(A.Is_symmetric());
+}
+
+TEST(MatrixTest, IsSymmetricFalse)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = 2.0;
+    A(1, 1) = 4.0;
+    A(1, 2) = 5.0;
+
+    A(2, 0) = 7.0;  // Does not match A(0,2) = 3
+    A(2, 1) = 5.0;
+    A(2, 2) = 6.0;
+
+    EXPECT_FALSE(A.Is_symmetric());
+}
+
+TEST(MatrixTest, NonSquareMatrixIsNotSymmetric)
+{
+    Matrix A(2, 3);
+
+    EXPECT_FALSE(A.Is_symmetric());
+}
+
+TEST(MatrixTest, IsIdentityTrue)
+{
+    Matrix A = Matrix::Identity(3);
+
+    EXPECT_TRUE(A.Is_identity());
+}
+
+TEST(MatrixTest, IsIdentityFalse)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(1, 1) = 1.0;
+    A(2, 2) = 2.0;
+
+    EXPECT_FALSE(A.Is_identity());
+}
+
+TEST(MatrixTest, IsIdentityFalseWithOffDiagonalValue)
+{
+    Matrix A = Matrix::Identity(3);
+
+    A(0, 1) = 1.0;
+
+    EXPECT_FALSE(A.Is_identity());
+}
+
+TEST(MatrixTest, NonSquareMatrixIsNotIdentity)
+{
+    Matrix A(2, 3);
+
+    EXPECT_FALSE(A.Is_identity());
+}
+
+TEST(MatrixTest, MultiplyVector2)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(1, 0) = 3.0;
+    A(1, 1) = 4.0;
+
+    Vector2 v(5.0, 6.0);
+
+    Vector2 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, 17.0);
+    EXPECT_DOUBLE_EQ(result.Y, 39.0);
+}
+
+TEST(MatrixTest, MultiplyVector2WithNegativeValues)
+{
+    Matrix A(2, 2);
+
+    A(0, 0) = 2.0;
+    A(0, 1) = -3.0;
+    A(1, 0) = -4.0;
+    A(1, 1) = 5.0;
+
+    Vector2 v(-2.0, 3.0);
+
+    Vector2 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, -13.0);
+    EXPECT_DOUBLE_EQ(result.Y, 23.0);
+}
+
+TEST(MatrixTest, MultiplyVector3)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = 2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = 4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = 6.0;
+
+    A(2, 0) = 7.0;
+    A(2, 1) = 8.0;
+    A(2, 2) = 9.0;
+
+    Vector3 v(1.0, 2.0, 3.0);
+
+    Vector3 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, 14.0);
+    EXPECT_DOUBLE_EQ(result.Y, 32.0);
+    EXPECT_DOUBLE_EQ(result.Z, 50.0);
+}
+
+TEST(MatrixTest, MultiplyVector3WithNegativeValues)
+{
+    Matrix A(3, 3);
+
+    A(0, 0) = 1.0;
+    A(0, 1) = -2.0;
+    A(0, 2) = 3.0;
+
+    A(1, 0) = -4.0;
+    A(1, 1) = 5.0;
+    A(1, 2) = -6.0;
+
+    A(2, 0) = 7.0;
+    A(2, 1) = -8.0;
+    A(2, 2) = 9.0;
+
+    Vector3 v(1.0, -2.0, 3.0);
+
+    Vector3 result = A * v;
+
+    EXPECT_DOUBLE_EQ(result.X, 14.0);
+    EXPECT_DOUBLE_EQ(result.Y, -32.0);
+    EXPECT_DOUBLE_EQ(result.Z, 50.0);
+}
+
+TEST(MatrixTest, IdentityTimesVector2)
+{
+    Matrix I = Matrix::Identity(2);
+
+    Vector2 v(5.0, -3.0);
+
+    Vector2 result = I * v;
+
+    EXPECT_DOUBLE_EQ(result.X, v.X);
+    EXPECT_DOUBLE_EQ(result.Y, v.Y);
+}
+
+TEST(MatrixTest, IdentityTimesVector3)
+{
+    Matrix I = Matrix::Identity(3);
+
+    Vector3 v(5.0, -3.0, 7.0);
+
+    Vector3 result = I * v;
+
+    EXPECT_DOUBLE_EQ(result.X, v.X);
+    EXPECT_DOUBLE_EQ(result.Y, v.Y);
+    EXPECT_DOUBLE_EQ(result.Z, v.Z);
+}

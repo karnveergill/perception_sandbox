@@ -2,11 +2,15 @@
 
 #include "perception/core/Hello.hpp"
 #include "perception/core/Version.hpp"
-
+#include <string>
+ 
 int main()
 {
-    std::cout << perception::core::Hello() << std::endl;
-    std::cout << "Version: " << perception::core::VersionString() << std::endl;
+    std::string output; 
+    output = perception::core::Hello() + "\n";
+    output += ("Version: " + static_cast<std::string>(perception::core::VersionString()) + "\n");
+    output += "so cool";
+    std::cout << output << std::endl; 
 
     return 0;
 }

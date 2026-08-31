@@ -1,7 +1,6 @@
 # -------------------------
 # History
 # -------------------------
-
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 
@@ -11,14 +10,12 @@ shopt -s histappend
 # -------------------------
 # Colors
 # -------------------------
-
 export TERM=xterm-256color
 
 
 # -------------------------
 # Completion
 # -------------------------
-
 if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
 fi
@@ -27,7 +24,6 @@ fi
 # -------------------------
 # Aliases
 # -------------------------
-
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -41,7 +37,6 @@ alias gl='git log --oneline --graph --decorate'
 # -------------------------
 # Git branch prompt
 # -------------------------
-
 parse_git_branch()
 {
     git branch 2>/dev/null |
