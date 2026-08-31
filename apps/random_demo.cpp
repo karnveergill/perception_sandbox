@@ -13,7 +13,7 @@ int main()
     int min = -1, max = 1; 
     for(int i = 0; i < 10; ++i)
     {
-        cout << i <<  " - Rando: " << rand.Uniform(min,max) << 
+        cout << i <<  " - Rando   : " << rand.Uniform(min,max) << 
                         " Rando 42: " << rand42.Uniform(min,max) << endl;
     }
 
@@ -22,7 +22,7 @@ int main()
     min = -10, max = 10; 
     for(int i = 0; i < 10; ++i)
     {
-        cout << i <<  " - Rando: " << rand.Uniform_int(min,max) << 
+        cout << i <<  " - Rando   : " << rand.Uniform_int(min,max) << 
                         " Rando 42: " << rand42.Uniform_int(min,max) << endl;
     }
 
@@ -31,7 +31,7 @@ int main()
     double mean = 0, stddev = 1;
     for(int i = 0; i < 10; ++i)
     {
-        cout << i <<  " - Rando: " << rand.Gaussian(mean, stddev) << 
+        cout << i <<  " - Rando   : " << rand.Gaussian(mean, stddev) << 
                         " Rando 42: " << rand42.Gaussian(mean, stddev) << endl;
     }
     return 0;
