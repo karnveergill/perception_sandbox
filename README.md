@@ -54,8 +54,8 @@ perception-sandbox/
 * [x] Vector2
 * [x] Vector3
 * [x] Matrix
-* [ ] Random number generation
-* [ ] Gaussian distributions
+* [x] Random number generation
+* [x] Gaussian distributions
 
 ### Simulation
 
